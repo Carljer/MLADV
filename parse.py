@@ -7,17 +7,19 @@ DIR = "reuters21578"
 def read_document(filename):
     with open(DIR + '/' + filename, 'r') as sgm_file:
         soup = BeautifulSoup(sgm_file, 'html.parser')
-        bodies = [body for body in soup.find_all('body')]
+        nr_of_doc = 100
+        bodies = []
+        for body in soup.find_all('body'):
+            bodies.append(body)
+            nr_of_doc -= 1
+            if nr_of_doc == 0: break
         return bodies
-        
+
 
 def main():
-    documents = ['reut2-002.sgm', 'reut2-002.sgm', 'reut2-002.sgm']
-    parsed_docs = []
-    for document in documents:
-        parsed_docs.append(read_document(document))
-
-    print(parsed_docs)
+    document = 'reut2-000.sgm'
+    parsed_doc = read_document(document)
+    print(parsed_doc)
 
 
 if __name__ == '__main__':
