@@ -58,6 +58,6 @@ def Convert_dict_to_Array(dict):
     return dictlist
 
 
-if __name__ == '__main__':
-    x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict())
-    print(Convert_dict_to_Array(x))
+# if __name__ == '__main__':
+#     x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict())
+#     print(Convert_dict_to_Array(x))
