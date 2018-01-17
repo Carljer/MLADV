@@ -22,5 +22,3 @@ def init():
     #     print(docs)
 
 
-if __name__ == '__main__':
-    init()
