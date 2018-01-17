@@ -68,8 +68,8 @@ def start_string_kernel(k, docs, feature_space):
     K = kernel(phi_mat,s,t)
     return K
 
-if __name__ == '__main__':
-    start_string_kernel()
+# if __name__ == '__main__':
+#     start_string_kernel()
 
 
 
