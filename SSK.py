@@ -1,5 +1,7 @@
 import itertools
+import pandas as pd
 import numpy as np
+pd.set_option('display.max_rows', 1000)
 
 def feature_mapping_of_substring(s, k):
     return [''.join(x) for x in itertools.combinations(s,k)]
@@ -38,7 +40,7 @@ def get_weight_decay(feature, doc):
 
 def get_phi_matrix(feature_space,docs):
     phi_mat = []
-    phi_mat_helper = []
+#     phi_mat_helper = []
     for doc in docs:
 #         phi_mat_helper.append(getPhi_helper(feature_space, doc))
         phi_mat.append(getPhi(feature_space, doc))
@@ -60,7 +62,7 @@ def get_feature_space(docs,k):
 def start_string_kernel(k, docs, feature_space):
 #     s = "science is organized knowledge"
 #     t = "wisdom is organized life"
-#     docs = ['cat','car','bat', 'bar']
+#     docs = [('cat', 'earn'),('car','earn'),('bat','acq'), ('bar','acq')]
 #     k = 2
 #     docs = [s , t]
 #     feature_space = get_feature_space(docs,k)
@@ -74,27 +76,71 @@ def start_string_kernel(k, docs, feature_space):
         elif docs[i][1] == 'acq':
             cat_2.append(docs[i][0])
 
-    cat1_matrix = [[None] * len(cat_1)]*len(cat_1)
-    cat2_matrix = [[None] * len(cat_2)]*len(cat_2)
+    cat1_matrix = pd.DataFrame([[None] * len(cat_1)]*len(cat_1))
+    cat2_matrix = pd.DataFrame([[None] * len(cat_2)]*len(cat_1))
     for i in range(len(cat_1)):
         d1 = cat_1[i]
         for j in range(len(cat_1)):
             d2 = cat_1[j]
             phi_mat = get_phi_matrix(feature_space, [d1,d2])
-            cat1_matrix[i][j] = kernel(phi_mat)
-#     print(result_matrix)
-    for i in range(len(cat_2)):
+            cat1_matrix[j][i] = kernel(phi_mat)
+#         print(cat1_matrix)
+    for i in range(len(cat_1)):
         d1 = cat_1[i]
         for j in range(len(cat_2)):
             d2 = cat_2[j]
             phi_mat = get_phi_matrix(feature_space, [d1,d2])
-            cat2_matrix[i][j] = kernel(phi_mat)
+            cat2_matrix[j][i] = kernel(phi_mat)
+#         print(cat2_matrix)
 
-    import pandas as pd
-    df1 = pd.DataFrame(cat1_matrix)
-    df2 = pd.DataFrame(cat2_matrix)
-    print(df1)
-    print(df2.shape)
+    earn_classification = pd.DataFrame()
+    earn_classification['means_earn'] = cat1_matrix.mean(axis=1)
+    earn_classification['means_acq'] = cat2_matrix.mean(axis=1)
+#     print(cat_1_means)
+#     print(cat_2_means)
+    earn_classification['class'] =  earn_classification['means_earn'] >= earn_classification['means_acq']
+    earn_positives = len(earn_classification[earn_classification['class'] == True])
+    earn_negatives = len(earn_classification[earn_classification['class'] == False])
+#     print(earn_positives)
+    print(earn_classification)
+
+
+    cat1_matrix = pd.DataFrame([[None] * len(cat_2)]*len(cat_2))
+    cat2_matrix = pd.DataFrame([[None] * len(cat_1)]*len(cat_2))
+    for i in range(len(cat_2)):
+        d1 = cat_2[i]
+        for j in range(len(cat_2)):
+            d2 = cat_2[j]
+            phi_mat = get_phi_matrix(feature_space, [d1,d2])
+            cat1_matrix[j][i] = kernel(phi_mat)
+        print(cat1_matrix)
+    for i in range(len(cat_2)):
+        d1 = cat_2[i]
+        for j in range(len(cat_1)):
+            d2 = cat_1[j]
+            phi_mat = get_phi_matrix(feature_space, [d1,d2])
+            cat2_matrix[j][i] = kernel(phi_mat)
+#         print(cat2_matrix)
+
+
+#         print(cat2_matrix)
+    acq_classification = pd.DataFrame()
+    acq_classification['means_earn'] = cat1_matrix.mean(axis=1)
+    acq_classification['means_acq'] = cat2_matrix.mean(axis=1)
+#     print(cat_1_means)
+#     print(cat_2_means)
+    acq_classification['class'] =  acq_classification['means_earn'] <= acq_classification['means_acq']
+    acq_positives = len(acq_classification[acq_classification['class'] == True])
+    acq_negatives = len(acq_classification[acq_classification['class'] == False])
+    print(acq_positives)
+    print(acq_negatives)
+    print(earn_positives)
+    print(earn_negatives)
+
+    precision = earn_positives / (acq_negatives + earn_positives)
+    print('precision:',precision)
+    recall = earn_positives / (earn_positives + earn_negatives)
+    print('recall:',recall)
     return 0
 
 
