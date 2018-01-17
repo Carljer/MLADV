@@ -9,7 +9,11 @@ def main():
     for doc in list_of_doc_tuples:
         dict_of_features = StringParser(k,doc[0], dict_of_features)
     
-    subspace_of_features = Convert_to_dict_Array(dict_of_features) 
+    subspace_of_features = Convert_dict_to_Array(dict_of_features)
+    docs = []
+    for tup in list_of_doc_tuples:
+        docs.append(tup[0])
     result = start_string_kernel(k, docs, subspace_of_features)
+    print(result)
 
 main()

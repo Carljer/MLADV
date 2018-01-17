@@ -44,7 +44,7 @@ def get_phi_matrix(feature_space,docs):
         phi_mat.append(getPhi(feature_space, doc))
     return phi_mat
 
-def kernel(phi_mat,s,t):
+def kernel(phi_mat):
     numerator = np.dot(phi_mat[0], phi_mat[1])
     denominator = np.sqrt(np.dot(phi_mat[0],phi_mat[0]) * np.dot(phi_mat[1],phi_mat[1]))
     res = numerator / denominator
@@ -65,7 +65,8 @@ def start_string_kernel(k, docs, feature_space):
 #     docs = [s , t]
 #     feature_space = get_feature_space(docs,k)
     phi_mat = get_phi_matrix(feature_space, docs)
-    K = kernel(phi_mat,s,t)
+
+    K = kernel(phi_mat)
     return K
 
 # if __name__ == '__main__':
