@@ -1,39 +1,63 @@
 import string
 import itertools
 
-def main(n = 1, dataset = ""):
-	
-	alphabet = string.ascii_lowercase[:] + " "
+# dic = dict()
+# for i in range k:
+#     dic = StringParser(1, data, dic)
 
-	allsub_couter = dict()
+def StringParser(n = 1, dataset = "", allsub_couter = dict()):
+    
+    alphabet = string.ascii_lowercase[:] + " "
 
-	#print(alphabet)
+    #allsub_couter = dict()
 
-	allsub = get_all_substrings(alphabet,n)
+    #print(alphabet)
 
-	for i in range(len(allsub)):
+    allsub = get_all_substrings(alphabet,n)
 
-		allsub_couter[allsub[i]] = 0
+    for i in range(len(allsub)):
 
-	#dicten med data i
-	print(freequency(allsub_couter,dataset,n))
-	#freequency(allsub_couter,dataset,n)
+        allsub_couter[allsub[i]] = 0
+
+    #dicten med data i
+    return freequency(allsub_couter,clean_Stirng(dataset),n)
+    #print(clean_Stirng(dataset))
 
 def get_all_substrings(S,n):
 
-	return ["".join(x) for x in itertools.product( S, repeat=n)]
+    return ["".join(x) for x in itertools.product( S, repeat=n)]
 
 def freequency(allsub_couter, dataset, n):
 
-	for x in range(len(dataset)-(n-1)):
-		allsub_couter[dataset[x:x+n]] = allsub_couter[dataset[x:x+n]]+ 1
+    for x in range(len(dataset)-(n-1)):
+        allsub_couter[dataset[x:x+n]] = allsub_couter[dataset[x:x+n]]+ 1
+
+    return allsub_couter 
 
 
 
+def clean_Stirng(string):
 
+    naughtyString = "!€%&#/()=^*¨><.,;:"
 
+    gemen = string.lower()
+    
+    for char in naughtyString:
+        #print(char)
+        gemen = gemen.replace(str(char), "")
 
-	return allsub_couter 
+    clean_string = gemen
+    return clean_string
+
+def Convert_dict_to_Array(dict):
+    dictlist = []
+
+    for key, value in dict.items():
+        if (value > 2):
+            dictlist.append(key)
+    return dictlist
+
 
 if __name__ == '__main__':
-	main(2, "hej jag heter")
+    x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict())
+    print(Convert_dict_to_Array(x))
