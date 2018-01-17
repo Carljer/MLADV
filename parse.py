@@ -13,9 +13,9 @@ def read_document(filename):
             b = body.get_text()
             category = body.find('topics').get_text()
             if category == 'earn':
-                result.append((re.sub(r'\W+', ' ', b), category))
+                result.append((re.sub(r'[A-z]+', ' ', b), category))
             if category == 'acq':
-                result.append((re.sub(r'\W+', ' ', b), category))
+                result.append((re.sub(r'[A-z]+', ' ', b), category))
                 
         return result
 
