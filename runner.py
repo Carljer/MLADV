@@ -13,7 +13,7 @@ def main():
     docs = []
     for tup in list_of_doc_tuples:
         docs.append(tup[0])
-    result = start_string_kernel(k, docs, subspace_of_features)
+    result = start_string_kernel(k, list_of_doc_tuples, subspace_of_features)
     print(result)
 
 main()

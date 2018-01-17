@@ -64,13 +64,38 @@ def start_string_kernel(k, docs, feature_space):
 #     k = 2
 #     docs = [s , t]
 #     feature_space = get_feature_space(docs,k)
-    phi_mat = get_phi_matrix(feature_space, docs)
+#     result_matrix = [[None] * len(docs)]*len(docs)
+    cat_1 = []
+    cat_2 = []
+    for i in range(len(docs)):
+#         print(docs[i])
+        if docs[i][1] == 'earn':
+            cat_1.append(docs[i][0])
+        elif docs[i][1] == 'acq':
+            cat_2.append(docs[i][0])
 
-    K = kernel(phi_mat)
-    return K
+    cat1_matrix = [[None] * len(cat_1)]*len(cat_1)
+    cat2_matrix = [[None] * len(cat_2)]*len(cat_2)
+    for i in range(len(cat_1)):
+        d1 = cat_1[i]
+        for j in range(len(cat_1)):
+            d2 = cat_1[j]
+            phi_mat = get_phi_matrix(feature_space, [d1,d2])
+            cat1_matrix[i][j] = kernel(phi_mat)
+#     print(result_matrix)
+    for i in range(len(cat_2)):
+        d1 = cat_1[i]
+        for j in range(len(cat_2)):
+            d2 = cat_2[j]
+            phi_mat = get_phi_matrix(feature_space, [d1,d2])
+            cat2_matrix[i][j] = kernel(phi_mat)
 
-# if __name__ == '__main__':
-#     start_string_kernel()
+    import pandas as pd
+    df1 = pd.DataFrame(cat1_matrix)
+    df2 = pd.DataFrame(cat2_matrix)
+    print(df1)
+    print(df2.shape)
+    return 0
 
 
 
