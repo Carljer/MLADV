@@ -9,14 +9,15 @@ def read_document(filename):
         soup = BeautifulSoup(sgm_file, 'html.parser')
         earn_counter = 0
         result = []
-        for body in soup.find_all('reuters'):
-            b = body.get_text()
-            category = body.find('topics').get_text()
-            if category == 'earn':
-                result.append((re.sub(r'[A-z]+', ' ', b), category))
-            if category == 'acq':
-                result.append((re.sub(r'[A-z]+', ' ', b), category))
-                
+        for content in soup.find_all('reuters'):
+            for body in content.find_all('body'):
+                b = body.get_text().lower()
+                b = ''.join([i for i in b if not i.isdigit()])
+                category = content.find('topics').get_text()
+                if category == 'earn':
+                    result.append((re.sub(r'\W+', ' ', b), category))
+                if category == 'acq':
+                    result.append((re.sub(r'\W+', ' ', b), category))
         return result
 
 
