@@ -25,7 +25,7 @@ def get_all_substrings(S,n):
 
 def freequency(allsub_couter, dataset, n):
 
-	for x in range(len(dataset)-1):
+	for x in range(len(dataset)-(n-1)):
 		allsub_couter[dataset[x:x+n]] = allsub_couter[dataset[x:x+n]]+ 1
 
 
@@ -36,4 +36,4 @@ def freequency(allsub_couter, dataset, n):
 	return allsub_couter 
 
 if __name__ == '__main__':
-	main()
+	main(2, "hej jag heter")

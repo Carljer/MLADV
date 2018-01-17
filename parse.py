@@ -10,7 +10,7 @@ def read_document(filename):
         nr_of_doc = 100
         bodies = []
         for body in soup.find_all('body'):
-            bodies.append(body)
+            bodies.append(str(body.get_text()).lower())
             nr_of_doc -= 1
             if nr_of_doc == 0: break
         return bodies
@@ -19,7 +19,8 @@ def read_document(filename):
 def main():
     document = 'reut2-000.sgm'
     parsed_doc = read_document(document)
-    print(parsed_doc)
+    for docs in parsed_doc:
+        print(docs)
 
 
 if __name__ == '__main__':
