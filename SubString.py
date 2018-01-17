@@ -1,18 +1,11 @@
 import string
 import itertools
 
-# dic = dict()
-# for i in range k:
-#     dic = StringParser(1, data, dic)
 
+#Main loopen för att skapa featurespace
 def StringParser(n = 1, dataset = "", allsub_couter = dict()):
     
     alphabet = string.ascii_lowercase[:] + " "
-
-    #allsub_couter = dict()
-
-    #print(alphabet)
-
     allsub = get_all_substrings(alphabet,n)
 
     for i in range(len(allsub)):
@@ -21,12 +14,13 @@ def StringParser(n = 1, dataset = "", allsub_couter = dict()):
 
     #dicten med data i
     return freequency(allsub_couter,clean_Stirng(dataset),n)
-    #print(clean_Stirng(dataset))
 
+#skapar alla möjliga substrings av storlek n av alfabet S
 def get_all_substrings(S,n):
 
     return ["".join(x) for x in itertools.product( S, repeat=n)]
 
+#Beräkar antalet förekommster av de olika substrängarna i Datasetet
 def freequency(allsub_couter, dataset, n):
 
     for x in range(len(dataset)-(n-1)):
@@ -35,7 +29,7 @@ def freequency(allsub_couter, dataset, n):
     return allsub_couter 
 
 
-
+#Tar bort otillåtna tecken och tar bort versaler (gör dem till gemener) 
 def clean_Stirng(string):
 
     naughtyString = "!€%&#/()=^*¨><.,;:"
@@ -58,6 +52,6 @@ def Convert_dict_to_Array(dict):
     return dictlist
 
 
-if __name__ == '__main__':
-    x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict())
-    print(Convert_dict_to_Array(x))
+# if __name__ == '__main__':
+#     x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict())
+#     print(Convert_dict_to_Array(x))
