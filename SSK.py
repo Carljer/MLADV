@@ -2,20 +2,19 @@ import itertools
 import pandas as pd
 import numpy as np
 pd.set_option('display.max_rows', 1000)
+from SVM import *
 
 def feature_mapping_of_substring(s, k):
     return [''.join(x) for x in itertools.combinations(s,k)]
 
 def getPhi(feature_space, doc, category):
-    dic = dict()
     weight_vec = [None]*len(feature_space)
     i=0
     for feature in feature_space:
         length = get_weight_decay(feature, doc)
         weight_vec[i] = length
         i+=1
-    dic[category] = weight_vec
-    return dic
+    return (category,weight_vec)
 
 def get_weight_decay(feature, doc):
     length_counter = 0
@@ -76,13 +75,14 @@ def start_string_kernel(k, docs, feature_space):
     cat1_matrix = pd.DataFrame([[None] * len(cat_1)]*len(cat_1))
     cat2_matrix = pd.DataFrame([[None] * len(cat_2)]*len(cat_2))
     for doc in cat_1:
-        class_A.append(getPhi(feature_space, doc, 'earn'))
+        class_A.append(getPhi(feature_space, doc, 1))
     
     for doc in cat_2:
-        class_B.append(getPhi(feature_space, doc , 'acq'))
+        class_B.append(getPhi(feature_space, doc , -1))
     
     data = class_A + class_B
     print(data)
+    svm(data)
 #         print(cat2_matrix)
 # 
 #     earn_classification = pd.DataFrame()
