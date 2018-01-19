@@ -30,8 +30,9 @@ def svm(X_train, Y_train, X_test, Y_test):
 #     print(Y_test)
     true_pos = len([x for x in TF_mat if x==True])
     
-    average_precision = average_precision_score(Y_test, Y_score)
+    precision = average_precision_score(Y_test, Y_score)
 #     recall = recall_score(Y_test, Y_pred, average='micro') 
     recall = recall_score(Y_test, Y_pred, average='weighted') 
-    print('precision: ', average_precision) 
-    print('recall', recall)
+#     print('precision: ', precision) 
+#     print('recall', recall)
+    return precision, recall 

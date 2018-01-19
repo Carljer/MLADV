@@ -4,10 +4,10 @@ import numpy as np
 from SVM import *
 # np.random.seed(100)
 
-
-def feature_mapping_of_substring(s, k):
-    return [''.join(x) for x in itertools.combinations(s,k)]
-
+# 
+# def feature_mapping_of_substring(s, k):
+#     return [''.join(x) for x in itertools.combinations(s,k)]
+# 
 def getPhi(feature_space, doc, category):
     weight_vec = [None]*len(feature_space)
     i=0
@@ -22,7 +22,7 @@ def get_weight_decay(feature, doc):
     i = 0
     j = 0
     substr=''
-    decay = 0.9
+    decay = 0.5
     while i < len(feature):
         while j < len(doc) and i < len(feature):
             if feature[i] not in doc:
@@ -54,14 +54,14 @@ def kernel(v1,v2):
     denominator = np.sqrt(np.dot(v1,v1) * np.dot(v2,v2))
     res = numerator / denominator
     return res
-
-def get_feature_space(docs,k):
-    feature_space = []
-    for doc in docs:
-        a = feature_mapping_of_substring(doc, k)
-        feature_space = feature_space + a
-    return set(feature_space)
-
+# 
+# def get_feature_space(docs,k):
+#     feature_space = []
+#     for doc in docs:
+#         a = feature_mapping_of_substring(doc, k)
+#         feature_space = feature_space + a
+#     return set(feature_space)
+# 
 def start_string_kernel(k, docs, feature_space):
 
     class_A = []
@@ -85,7 +85,9 @@ def start_string_kernel(k, docs, feature_space):
 #     print(X_train.shape)
 #     print(X_test.shape)
 
-    svm(X_train, Y_train, X_test, Y_test)
+    precision , recall = svm(X_train, Y_train, X_test, Y_test)
+    print('precision: ', precision)
+    print('recall: ', recall)
     return 0
 
 
