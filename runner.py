@@ -5,11 +5,12 @@ from SubString import *
 def main():
     k = 2
     list_of_doc_tuples = init()
+    reduced_feature_space = False
     dict_of_features = dict()
     for doc in list_of_doc_tuples:
         dict_of_features = StringParser(k,doc[0], dict_of_features)
     
-    subspace_of_features = Convert_dict_to_Array(dict_of_features)
+    subspace_of_features = Convert_dict_to_Array(dict_of_features, reduced_feature_space)
     docs = []
     for tup in list_of_doc_tuples:
         docs.append(tup[0])

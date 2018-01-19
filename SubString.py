@@ -54,11 +54,11 @@ def Convert_dict_to_Array(dict,flag = True):
 
     if not flag:
         for key, value in dict.items():
-            if (value > 0):
+            if (value >= 0):
                 dictlist.append(key)
         return dictlist
 
 
-if __name__ == '__main__':
-    x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict(),False)
-    print(Convert_dict_to_Array(x,False))
+# if __name__ == '__main__':
+#     x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict(),False)
+#     print(Convert_dict_to_Array(x,False))

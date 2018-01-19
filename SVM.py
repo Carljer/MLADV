@@ -1,5 +1,5 @@
 import numpy as np
-import random, math
+# import random, math
 import pylab
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_digits
