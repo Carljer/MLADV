@@ -1,8 +1,9 @@
 import itertools
 import pandas as pd
 import numpy as np
-pd.set_option('display.max_rows', 1000)
 from SVM import *
+# np.random.seed(100)
+
 
 def feature_mapping_of_substring(s, k):
     return [''.join(x) for x in itertools.combinations(s,k)]
@@ -38,18 +39,19 @@ def get_weight_decay(feature, doc):
         j=0
         i+=1
     return 0
-# 
-# def get_phi_matrix(feature_space,doc, category):
-#     phi_mat = []
-# #     phi_mat_helper = []
-#     for doc in docs:
-# #         phi_mat_helper.append(getPhi_helper(feature_space, doc))
-#         phi_mat.append(getPhi(feature_space, doc, category))
-#     return phi_mat
 
-def kernel(phi_mat):
-    numerator = np.dot(phi_mat[0], phi_mat[1])
-    denominator = np.sqrt(np.dot(phi_mat[0],phi_mat[0]) * np.dot(phi_mat[1],phi_mat[1]))
+def createGram(train, test=None):
+    if test == None:
+        test=train
+    G = np.zeros([len(train),len(test)]) # Init NxN matrix.
+    for i in range(0, len(train)):
+        for j in range(0, len(test)):
+            G[i,j] = float(kernel(train[i], test[j]))
+    return G
+
+def kernel(v1,v2):
+    numerator = np.dot(v1, v2)
+    denominator = np.sqrt(np.dot(v1,v1) * np.dot(v2,v2))
     res = numerator / denominator
     return res
 
@@ -61,78 +63,29 @@ def get_feature_space(docs,k):
     return set(feature_space)
 
 def start_string_kernel(k, docs, feature_space):
+
     class_A = []
     class_B = []
     cat_1 = []
     cat_2 = []
     for i in range(len(docs)):
-#         print(docs[i])
         if docs[i][1] == 'earn':
-            cat_1.append(docs[i][0])
+            class_A.append(getPhi(feature_space, docs[i][0], 1))
         elif docs[i][1] == 'acq':
-            cat_2.append(docs[i][0])
-
-    cat1_matrix = pd.DataFrame([[None] * len(cat_1)]*len(cat_1))
-    cat2_matrix = pd.DataFrame([[None] * len(cat_2)]*len(cat_2))
-    for doc in cat_1:
-        class_A.append(getPhi(feature_space, doc, 1))
-    
-    for doc in cat_2:
-        class_B.append(getPhi(feature_space, doc , -1))
-    
+            class_B.append(getPhi(feature_space, docs[i][0], -1))
+   
     data = class_A + class_B
-    print(data)
-    svm(data)
-#         print(cat2_matrix)
-# 
-#     earn_classification = pd.DataFrame()
-#     earn_classification['means_earn'] = cat1_matrix.mean(axis=1)
-#     earn_classification['means_acq'] = cat2_matrix.mean(axis=1)
-# #     print(cat_1_means)
-# #     print(cat_2_means)
-#     earn_classification['class'] =  earn_classification['means_earn'] >= earn_classification['means_acq']
-#     earn_true_positives = len(earn_classification[earn_classification['class'] == True])
-#     earn_false_positives = len(earn_classification[earn_classification['class'] == False])
-# #     print(earn_positives)
-#     print(earn_classification)
-# 
-# 
-#     cat1_matrix = pd.DataFrame([[None] * len(cat_2)]*len(cat_2))
-#     cat2_matrix = pd.DataFrame([[None] * len(cat_1)]*len(cat_2))
-#     for i in range(len(cat_2)):
-#         d1 = cat_2[i]
-#         for j in range(len(cat_2)):
-#             d2 = cat_2[j]
-#             phi_mat = get_phi_matrix(feature_space, [d1,d2])
-#             cat1_matrix[j][i] = kernel(phi_mat)
-#         print(cat1_matrix)
-#     for i in range(len(cat_2)):
-#         d1 = cat_2[i]
-#         for j in range(len(cat_1)):
-#             d2 = cat_1[j]
-#             phi_mat = get_phi_matrix(feature_space, [d1,d2])
-#             cat2_matrix[j][i] = kernel(phi_mat)
-# #         print(cat2_matrix)
-# 
-# 
-# #         print(cat2_matrix)
-#     acq_classification = pd.DataFrame()
-#     acq_classification['means_earn'] = cat1_matrix.mean(axis=1)
-#     acq_classification['means_acq'] = cat2_matrix.mean(axis=1)
-# #     print(cat_1_means)
-# #     print(cat_2_means)
-#     acq_classification['class'] =  acq_classification['means_earn'] <= acq_classification['means_acq']
-#     acq_positives = len(acq_classification[acq_classification['class'] == True])
-#     acq_negatives = len(acq_classification[acq_classification['class'] == False])
-#     print(acq_positives)
-#     print(acq_negatives)
-#     print(earn_true_positives)
-#     print(earn_false_positives)
-# 
-#     precision = earn_true_positives / (earn_true_positives + earn_false_positives)
-#     print('precision:',precision)
-#     recall = earn_positives / (earn_positives + earn_negatives)
-#     print('recall:',recall)
+
+    X , Y = shuffle([d[1] for d in data], [d[0] for d in data] ) 
+
+    phi_train , phi_test = X[0 : int(len(data)*0.7)] , X[int(len(data)*0.7) : ]
+    Y_train , Y_test = Y[0 : int(len(data)*0.7)] , Y[int(len(data)*0.7) : ]
+    X_train = np.array(createGram(phi_train))
+    X_test = np.array(createGram(phi_train,phi_test)).T
+#     print(X_train.shape)
+#     print(X_test.shape)
+
+    svm(X_train, Y_train, X_test, Y_test)
     return 0
 
 
