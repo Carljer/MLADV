@@ -16,7 +16,7 @@ def main():
         docs.append(tup[0])
     
     result_list = []
-    for i in range(3):
+    for i in range(10):
         result_list.append(start_string_kernel(k, list_of_doc_tuples, subspace_of_features))
     
     df = pd.DataFrame(result_list)

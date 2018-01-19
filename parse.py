@@ -22,7 +22,7 @@ def read_document(filename):
 
 
 def init():
-    document = 'reut2-014.sgm'
+    document = 'reut2-001.sgm'
     data = read_document(document)
     return data
 
