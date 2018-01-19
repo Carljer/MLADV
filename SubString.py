@@ -3,7 +3,7 @@ import itertools
 
 
 #Main loopen för att skapa featurespace
-def StringParser(n = 1, dataset = "", allsub_couter = dict()):
+def StringParser(n = 1, dataset = "", allsub_couter = dict(), flag = True):
     
     alphabet = string.ascii_lowercase[:] + " "
     allsub = get_all_substrings(alphabet,n)
@@ -43,15 +43,22 @@ def clean_Stirng(string):
     clean_string = gemen
     return clean_string
 
-def Convert_dict_to_Array(dict):
+def Convert_dict_to_Array(dict,flag = True):
     dictlist = []
 
-    for key, value in dict.items():
-        if (value > 2):
-            dictlist.append(key)
-    return dictlist
+    if flag:
+        for key, value in dict.items():
+            if (value > 2):
+                dictlist.append(key)
+        return dictlist
+
+    if not flag:
+        for key, value in dict.items():
+            if (value > 0):
+                dictlist.append(key)
+        return dictlist
 
 
-# if __name__ == '__main__':
-#     x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict())
-#     print(Convert_dict_to_Array(x))
+if __name__ == '__main__':
+    x = StringParser(3, "HEJ hehehhehehehehe jag #RA,,.;; heter", dict(),False)
+    print(Convert_dict_to_Array(x,False))
