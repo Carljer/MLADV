@@ -14,7 +14,14 @@ def main():
     docs = []
     for tup in list_of_doc_tuples:
         docs.append(tup[0])
-    result = start_string_kernel(k, list_of_doc_tuples, subspace_of_features)
-    print(result)
-
+    
+    result_list = []
+    for i in range(3):
+        result_list.append(start_string_kernel(k, list_of_doc_tuples, subspace_of_features))
+    
+    df = pd.DataFrame(result_list)
+#     df.columns(['ssk precision','ssk recall','ng precision','ng recall'])
+    print(df)
+    print('means', df.mean(axis=0))
+    print('std', df.std(axis=0))
 main()

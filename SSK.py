@@ -1,11 +1,11 @@
 import itertools
-# from sklearn.utils import shuffle
-from random import shuffle
+from sklearn.utils import shuffle
+# from random import shuffle
 import pandas as pd
 import numpy as np
 from SVM import *
 import ngram as ng
-np.random.seed(100)
+# np.random.seed(100)
 
 # 
 # def feature_mapping_of_substring(s, k):
@@ -75,21 +75,17 @@ def kernel(v1,v2):
 #     return set(feature_space)
 # 
 def start_string_kernel(k, docs, feature_space):
-#     print(docs[0:3])
-    shuffle(docs)
-#     print(docs[0:3])
-    class_A = []
-    class_B = []
+    docs=shuffle(docs)
+    data = []
     cat_1 = []
     cat_2 = []
     for i in range(len(docs)):
         if docs[i][1] == 'earn':
-            class_A.append(getPhi(feature_space, docs[i][0], 1))
+            data.append(getPhi(feature_space, docs[i][0], 1))
 #         elif docs[i][1] == 'acq'  or docs[i][1] == 'corn' or docs[i][1] == 'crude':
         else:
-            class_B.append(getPhi(feature_space, docs[i][0], -1))
+            data.append(getPhi(feature_space, docs[i][0], -1))
    
-    data = class_A + class_B
 
     X , Y = [d[1] for d in data], [d[0] for d in data]
 
@@ -102,16 +98,16 @@ def start_string_kernel(k, docs, feature_space):
 
 ##################### NGRAM#####################
     X , Y = [d[0] for d in docs], [ 1 if d[1] == 'earn'  else -1 for d in docs] 
-    ngx_train , ngx_test = X[:int(len(docs)*0.7)] , X[int(len(docs)*0.7) : ]
+    ngx_train , ngx_test = X[0 :int(len(docs)*0.7)] , X[int(len(docs)*0.7) : ]
     ngy_train , ngy_test = Y[0 : int(len(docs)*0.7)] , Y[int(len(docs)*0.7) : ]
     NG_train = create_ngram(ngx_train,k)
     NG_test = create_ngram(ngx_train,k, ngx_test).T
     
     ssk_precision , ssk_recall = svm(X_train, Y_train, X_test, Y_test)
     ng_precision , ng_recall = svm(NG_train, ngy_train, NG_test, ngy_test)
-    print('SSK precision: ', ssk_precision, ' NG precision', ng_precision)
-    print('SSK recall: ', ssk_recall, ' NG recall', ng_recall)
-    return 0
+#     print('SSK precision: ', ssk_precision, ' NG precision', ng_precision)
+#     print('SSK recall: ', ssk_recall, ' NG recall', ng_recall)
+    return [ssk_precision, ssk_recall, ng_precision, ng_recall]
 
 
 
